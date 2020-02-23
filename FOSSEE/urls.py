@@ -24,5 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('login', obtain_auth_token),
     path('signup', userViews.signup.as_view()),
-    path('rooms', roomViews.Rooms.as_view())
+    path('rooms', roomViews.Rooms.as_view()),
+    path('rooms/<int:id>', roomViews.RoomsRUD.as_view()),
+    path('timeslots', roomViews.TimeSlots.as_view()),
+    path('timeslots/<int:id>', roomViews.TimeSlotsRUD.as_view()),
 ]
