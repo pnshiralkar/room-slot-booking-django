@@ -30,6 +30,7 @@ class TimeSlotsSerializer(serializers.ModelSerializer):
         if int(attrs['time_from']) >= int(attrs['time_to']):
             raise serializers.ValidationError("time_to should be greater than time_from")
         print(TimeSlot.objects.filter(room_id=attrs['room_id'], time_to__gte=attrs['time_from']).count())
-        if TimeSlot.objects.filter(room_id=attrs['room_id'], time_to__gte=attrs['time_from'], time_from__lte=attrs['time_to']).count():
+        if TimeSlot.objects.filter(room_id=attrs['room_id'], time_to__gte=attrs['time_from'],
+                                   time_from__lte=attrs['time_to']).count():
             raise serializers.ValidationError("Time slots should not overlap for a particular room")
         return attrs
