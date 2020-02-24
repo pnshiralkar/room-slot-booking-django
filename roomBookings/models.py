@@ -8,8 +8,12 @@ class Room(models.Model):
 
 
 class TimeSlot(models.Model):
-    time_from = models.CharField(max_length=4)
-    time_to = models.CharField(max_length=4)
+    time_from = models.TimeField(max_length=4)
+    time_to = models.TimeField(max_length=4)
     room_id = models.ForeignKey('roomBookings.Room', related_name='timeSlots', on_delete=models.CASCADE)
-    booked = models.BooleanField(default=False)
-    bookedBy = models.ForeignKey('userAuth.User', related_name='timeSlotsBook', on_delete=models.CASCADE, null=True)
+
+
+class Booking(models.Model):
+    date = models.DateField()
+    customer = models.ForeignKey('userAuth.User', related_name='bookingUser', on_delete=models.CASCADE)
+    time_slot = models.ForeignKey('roomBookings.TimeSlot', related_name='bookingSlot', on_delete=models.CASCADE)

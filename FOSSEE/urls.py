@@ -27,5 +27,7 @@ urlpatterns = [
     path('rooms', roomViews.Rooms.as_view()),
     path('rooms/<int:id>', roomViews.RoomsRUD.as_view()),
     path('timeslots', roomViews.TimeSlots.as_view()),
-    path('timeslots/<int:id>', roomViews.TimeSlotsRUD.as_view()),
+    path('timeslots/<int:id>', roomViews.TimeSlotsRD.as_view()),
+    path('bookings', roomViews.Bookings.as_view()),
+    path('bookings/<int:id>', roomViews.BookingsRD.as_view()),
 ]
