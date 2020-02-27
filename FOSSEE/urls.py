@@ -19,9 +19,11 @@ from rest_framework.authtoken.views import obtain_auth_token
 
 from userAuth import views as userViews
 from roomBookings import views as roomViews
+from userAuth.views import get_role
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('role', get_role),
     path('login', obtain_auth_token),
     path('signup', userViews.signup.as_view()),
     path('rooms', roomViews.Rooms.as_view()),
