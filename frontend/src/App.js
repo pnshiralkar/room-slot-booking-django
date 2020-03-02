@@ -18,6 +18,7 @@ import SignUp from "./components/Signup";
 import Login from "./components/Login";
 import {AppBar} from "@material-ui/core";
 import MenuAppBar from "./components/AppBar";
+import Dashboard from "./components/Dashboard";
 
 
 class Hello extends React.Component {
@@ -68,23 +69,6 @@ class Btn extends React.Component{
   }
 }
 
-class List extends React.Component{
-  constructor() {
-    super();
-    this.arr = [1,2,3,4,5];
-  }
-  render() {
-    return (
-        <ul>
-          {this.arr.map((n)=>(<li key={n.toString()}>{n}</li>))}
-        </ul>
-    )
-  }
-}
-
-
-var hello = <Hello name="Pratham"/>;
-
 function App() {
     const [auth, setAuth] = React.useState(false);
     const [role, setRole] = React.useState();
@@ -100,7 +84,7 @@ function App() {
 
     return (
         <div>
-            <MenuAppBar auth={auth} setAuth={setAuth} history={history}/>
+            <MenuAppBar auth={auth} setAuth={setAuth} history={history} />
             <Switch>
                 <Route path="/signup">
                     <SignUp history={history}/>
@@ -109,8 +93,8 @@ function App() {
                     <Login auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
                 </Route>
                 <Route path="/">
-                    {(role == "customer") && <h1>Customer Home Page</h1>}
-                    {(role == "roomManager") && <h1>Room Manager Home Page</h1>}
+                    {(role == "roomManager") && <Dashboard/>}
+                    {(role == "customer") && <h1>Room Manager Home Page</h1>}
                 </Route>
             </Switch>
         </div>

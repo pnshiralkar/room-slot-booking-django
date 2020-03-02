@@ -179,6 +179,7 @@ class Form extends React.Component{
             console.log(JSON.stringify(data));
             axios.post(baseUrl + '/signup', qs.stringify(data), config).then(res => {
                 console.log(res);
+                this.props.history.replace('/login');
             }).catch(error => {
                 if (!error.response) {
                     // network error
@@ -302,7 +303,7 @@ class Form extends React.Component{
     }
 }
 
-export default function SignUp() {
+export default function SignUp(props) {
     const classes = useStyles();
 
     return (
@@ -315,7 +316,7 @@ export default function SignUp() {
                 <Typography component="h1" variant="h5">
                     Create Account
                 </Typography>
-                <Form classes={classes}/>
+                <Form classes={classes} history={props.history}/>
             </div>
         </Container>
     );

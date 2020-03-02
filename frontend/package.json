@@ -3,17 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "^2.4.0",
     "@material-ui/core": "^4.9.4",
+    "@material-ui/pickers": "^3.2.10",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.1",
     "@testing-library/user-event": "^7.2.1",
+    "date-fns": "^2.0.0-beta.5",
     "qs": "latest",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-number-format": "^4.4.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.0",
     "react-validation": "^3.0.7",
-    "reactjs-localstorage": "0.0.8"
+    "reactjs-localstorage": "0.0.8",
+    "recharts": "^2.0.0-beta.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Room(models.Model):
-    location = models.TextField(null=True)
+    name = models.TextField(null=True)
     num_days_in_adv = models.IntegerField()
     owner = models.ForeignKey('userAuth.User', related_name='rooms', on_delete=models.CASCADE)
 
