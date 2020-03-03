@@ -8,7 +8,7 @@ class IsOwner(permissions.BasePermission):
 
 class IsRoomOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.room.owner == request.user
+        return obj.room_id.owner == request.user
 
 
 class IsRoomManager(permissions.BasePermission):

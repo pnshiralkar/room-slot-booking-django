@@ -32,7 +32,7 @@ class TimeSlots(ListCreateAPIView):
 
 
 class TimeSlotsRD(RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwner, my_permissions.IsCustomer]
+    permission_classes = [permissions.IsAuthenticated, my_permissions.IsRoomOwner, my_permissions.IsRoomManager]
     lookup_url_kwarg = 'id'
     queryset = TimeSlot.objects.all()
     serializer_class = TimeSlotsSerializer

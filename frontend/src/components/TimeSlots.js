@@ -9,7 +9,15 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from './Title';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import {GridListTile, Input, ListItemIcon, ListItemSecondaryAction, ListItemText, Paper} from "@material-ui/core";
+import {
+  FormHelperText,
+  GridListTile,
+  Input,
+  ListItemIcon,
+  ListItemSecondaryAction,
+  ListItemText,
+  Paper
+} from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Grid from "@material-ui/core/Grid";
@@ -32,6 +40,12 @@ const useStyles = makeStyles(theme => ({
   },
   roomTitle: {
     float: 'left',
+    margin: '5px'
+  },
+  roomSr: {
+    float: 'left',
+    margin: '5px',
+    marginRight: '20px'
   },
   delRoom: {
     float: 'right',
@@ -53,43 +67,21 @@ const useStyles = makeStyles(theme => ({
 
 function RowComponent(props){
   const classes = useStyles();
-  const [edit, setEdit] = React.useState(false);
-  const [name, setName] = React.useState('');
-  const [days, setDays] = React.useState('');
-  const [room, setRoom] = React.useState(props.room);
-
-  const handleEdit = (e)=>{
-    e.preventDefault();
-    setEdit(true);
-  };
-
-  const handleSave = (e)=>{
-    e.preventDefault();
-    console.log(name.length)
-    let data = {}
-    if(name.length)
-      data.name = name;
-    if(days.length)
-      data.num_days_in_adv = days;
-    axios.patch(baseUrl+'/rooms/'+room.id, data, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
-      setRoom(res.data);
-    })
-    setEdit(false);
+  let ampmFrom = ' AM', ampmTo = ' AM';
+  let from = parseInt(props.timeslot.time_from.split(':')[0]), to = parseInt(props.timeslot.time_to.split(':')[0]);
+  if(from>12){
+    from -= 12;
+    ampmFrom = ' PM';
+  }
+  if(to>12){
+    to -= 12;
+    ampmTo = ' PM';
   }
 
-  const handleNameChange = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
-  }
-
-  const handleDaysChange = (e) => {
-    e.preventDefault();
-    setDays(e.target.value);
-  }
 
   const handleDel = (e) => {
     e.preventDefault();
-    axios.delete(baseUrl+'/rooms/'+room.id, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
+    axios.delete(baseUrl+'/timeslots/'+props.timeslot.id, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
       props.setDel(!props.del);
     })
   }
@@ -97,23 +89,19 @@ function RowComponent(props){
   return(
       <ListItem>
         <Paper className={classes.listPaper} >
+          <ListItemText className={classes.roomSr}>
+            <h3>{props.sr}</h3>
+          </ListItemText>
           <ListItemText className={classes.roomTitle}>
-            {!edit && <h3>{room.name}</h3>}
-            {edit && <div><TextField type='text' placeholder={room.name} onChange={handleNameChange}/><br/><br/></div>}
+            <h3>{from + ':' + props.timeslot.time_from.split(':')[1] + ampmFrom}</h3>
+          </ListItemText>
+          <FormHelperText className={classes.roomTitle} style={{marginTop: '12px'}}><h3>to</h3></FormHelperText>
+          <ListItemText className={classes.roomTitle}>
+            <h3>{to + ':' + props.timeslot.time_to.split(':')[1] + ampmTo}</h3>
           </ListItemText>
           <IconButton className={classes.delRoom} onClick={handleDel}>
             <DeleteIcon/>
           </IconButton>
-          <IconButton className={classes.delRoom}>
-            {!edit && <EditIcon onClick={handleEdit} />}
-            {edit && <SaveIcon onClick={handleSave} />}
-          </IconButton>
-          <TimeSlotsModal roomId={room.id} roomName={room.name}/>
-          <div className={classes.numDays}>
-            {!edit && <h3 className={classes.numDaysH3}>{room.num_days_in_adv}</h3>}
-            {edit && <div><Input type='number' placeholder={room.num_days_in_adv} onChange={handleDaysChange}/><br/></div>}
-            days to book in advance
-          </div>
         </Paper>
       </ListItem>
   )
@@ -126,13 +114,11 @@ export default function Rooms(props) {
   const rows = props.rows;
   return (
     <React.Fragment>
-      <Title>My Rooms</Title>
-
       <List>
         {rows.map(row => (
-          <RowComponent key={row.id} room={row} setDel={props.setDel} del={props.del}/>
+          <RowComponent sr={row.sr} timeslot={row} setDel={props.setDel} del={props.del}/>
         ))}
-        {!rows.length && <Typography color="textSecondary" style={{textAlign: 'center'}}>No rooms to display!</Typography>}
+        {!rows.length && <Typography color="textSecondary" style={{textAlign: 'center'}}>No timeslots to display!</Typography>}
       </List>
 
 

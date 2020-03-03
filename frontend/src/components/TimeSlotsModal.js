@@ -1,11 +1,13 @@
-import React from 'react';
+
+import 'date-fns';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
-import {FormGroup, Paper, TextField} from "@material-ui/core";
+import {FormGroup, FormHelperText, Paper, TextField} from "@material-ui/core";
 import Input from "@material-ui/core/Input";
 import CloseIcon from '@material-ui/icons/Close';
 import IconButton from "@material-ui/core/IconButton";
@@ -19,6 +21,7 @@ import {
     KeyboardDatePicker,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import TimeSlots from "./TimeSlots";
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -65,21 +68,40 @@ export default function TimeSlotsModal(props) {
         setOpen(false);
     };
 
-    const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-
-    const handleDateChange = date => {
-        setSelectedDate(date);
-    };
-
-    const handleDaysChange = (e) => {
-        setDays(e.target.value);
-    }
+    const [from, setFrom] = React.useState(new Date('2014-08-18T10:00:00'));
+    const [to, setTo] = React.useState(new Date('2014-08-18T18:00:00'));
+    const [errorText, setErrorText] = React.useState('');
+    const [del, setDel] = React.useState(false);
+    const [rows, setRows] = React.useState([]);
 
     const handleSubmit = (e) => {
-        axios.post(baseUrl + '/rooms', {name, num_days_in_adv: days}, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
-            setOpen(false);
-            props.setDel(!props.del);
+        console.log(from.toTimeString().split(' '));
+        axios.post(baseUrl + '/timeslots', {time_from: from.toTimeString().split(' ')[0], time_to: to.toTimeString().split(' ')[0], room_id: props.roomId}, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
+            setDel(!del);
+            // setOpen(false);
+            // Update list of slots
+        }).catch(e=>{
+            let err = '';
+            let data = e.response.data;
+            for(let d in data)
+                for(let i in data[d])
+                    err += data[d][i];
+            setErrorText(err);
         })
+    }
+
+    useEffect((e)=>{
+        axios.get(baseUrl + '/timeslots?room_id=' + props.roomId, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
+            setRows(res.data);
+        })
+    }, [del])
+
+    const handleFromChange = (e) => {
+        setFrom(e);
+    }
+
+    const handleToChange = (e) => {
+        setTo(e);
     }
 
     return (
@@ -108,34 +130,42 @@ export default function TimeSlotsModal(props) {
                             <CloseIcon onClick={handleClose}/>
                         </IconButton>
                         <h1 id="transition-modal-title" style={{textAlign: 'center', marginBottom: '5px'}}>Manage TimeSlots</h1>
-                        <Typography color='textSecondary' style={{textAlign: 'center', marginBottom: '30px'}}>for Room 1</Typography>
+                        <Typography color='textSecondary' style={{textAlign: 'center', marginBottom: '30px'}}>for {props.roomName} room </Typography>
+
+                        {rows.map((row, ind)=>{
+                            return (
+                                <TimeSlots rows={[{sr: ind+1, id:row.id, time_from: row.time_from, time_to: row.time_to}]} del={del} setDel={setDel}/>
+                            )
+                        })}
+
+
                         <FormGroup style={{alignItems: 'center'}}>
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                             <KeyboardTimePicker
                                 margin="normal"
                                 id="time-picker"
-                                label="Time picker"
-                                value={selectedDate}
+                                label="Time From"
+                                value={from}
+                                onChange={handleFromChange}
                                 KeyboardButtonProps={{
                                     'aria-label': 'change time',
                                 }}
                             />
-                            <Input
-                                type='number'
-                                className={classes.numField}
-                                onChange={handleDaysChange}
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="name"
-                                label="Name of the room"
-                                name="name"
-                                placeholder="Max days to book in advance"
-                            /><br/>
-                            <Button variant="contained" style={{width: '50%'}} color="primary" onClick={handleSubmit}>
-                                Add Room
-                            </Button>
+                                <KeyboardTimePicker
+                                    margin="normal"
+                                    id="time-picker"
+                                    label="Time To"
+                                    value={to}
+                                    onChange={handleToChange}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
                             </MuiPickersUtilsProvider>
+                            <FormHelperText error>{errorText}</FormHelperText><br/>
+                            <Button variant="contained" style={{width: '50%'}} color="primary" onClick={handleSubmit}>
+                                Add Slot
+                            </Button>
                         </FormGroup>
                     </Paper>
                 </Fade>
