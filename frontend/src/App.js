@@ -19,6 +19,8 @@ import Login from "./components/Login";
 import {AppBar} from "@material-ui/core";
 import MenuAppBar from "./components/AppBar";
 import Dashboard from "./components/Dashboard";
+import CustomerDashboard from "./components/CustomerDashboard";
+import Book from "./components/Book";
 
 
 class Hello extends React.Component {
@@ -92,9 +94,12 @@ function App() {
                 <Route path="/login">
                     <Login auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
                 </Route>
+                <Route path="/book">
+                    <Book auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
+                </Route>
                 <Route path="/">
                     {(role == "roomManager") && <Dashboard/>}
-                    {(role == "customer") && <h1>Room Manager Home Page</h1>}
+                    {(role == "customer") && <CustomerDashboard history={history}/>}
                 </Route>
             </Switch>
         </div>

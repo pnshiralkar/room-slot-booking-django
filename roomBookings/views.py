@@ -1,17 +1,26 @@
 from rest_framework import permissions
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, RetrieveDestroyAPIView, ListAPIView
 
 from roomBookings.models import Room, TimeSlot, Booking
 from roomBookings import permissions as my_permissions
-from roomBookings.serializers import RoomSerializer, TimeSlotsSerializer, BookingSerializer
+from roomBookings.serializers import RoomSerializer, TimeSlotsSerializer, BookingSerializer, RoomForCustomerSerializer
 
 
 class Rooms(ListCreateAPIView):
-    permission_classes = [my_permissions.IsOwner, permissions.IsAuthenticated, my_permissions.IsRoomManager]
-    serializer_class = RoomSerializer
+    # permission_classes = [my_permissions.IsOwner, permissions.IsAuthenticated, my_permissions.IsRoomManager]
+    # serializer_class = RoomSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.is_room_manager:
+            return RoomSerializer
+        else:
+            return RoomForCustomerSerializer
 
     def get_queryset(self):
-        return Room.objects.filter(owner=self.request.user)
+        if self.request.user.is_room_manager:
+            return Room.objects.filter(owner=self.request.user)
+        else:
+            return Room.objects.all()
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
