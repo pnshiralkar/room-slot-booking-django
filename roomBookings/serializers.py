@@ -2,6 +2,8 @@ from django.db import models
 from rest_framework import serializers
 from datetime import datetime
 from roomBookings.models import Room, TimeSlot, Booking
+from userAuth.models import User
+from userAuth.serializers import UserField
 
 
 class RoomField(serializers.PrimaryKeyRelatedField):
@@ -80,6 +82,7 @@ class TimeSlotForCustomerOnlySerializer(serializers.ModelSerializer):
 
 class RoomSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotOnlySerializer(many=True, read_only=True)
+    owner = UserField(queryset=User.objects.all())
 
     class Meta:
         model = Room
@@ -104,7 +107,7 @@ class TimeSlotsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = TimeSlot
-        fields = ['time_from', 'time_to', 'room_id', 'bookings']
+        fields = ['id', 'time_from', 'time_to', 'room_id', 'bookings']
         read_only_fields = ['bookings']
 
     def validate(self, attrs):
@@ -119,6 +122,7 @@ class TimeSlotsSerializer(serializers.ModelSerializer):
 
 class BookingSerializer(serializers.ModelSerializer):
     time_slot = TimeSlotField(queryset=TimeSlot.objects.all())
+    customer = UserField(queryset=User.objects.all())
 
     class Meta:
         fields = '__all__'

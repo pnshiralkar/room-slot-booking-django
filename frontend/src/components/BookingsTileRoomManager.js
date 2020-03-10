@@ -41,7 +41,7 @@ function dateOk(s, curr){
         return true;
 }
 
-export default function BookingsTileCust(props) {
+export default function BookingsTileRoomManager(props) {
     const classes = useStyles();
 
     const handleClick = e => {

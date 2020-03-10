@@ -21,7 +21,9 @@ import * as qs from "qs";
 
 const useStyles = makeStyles(theme => ({
     paper: {
-        marginTop: theme.spacing(8),
+        position: 'relative',
+        top: '45vh',
+        transform: 'translateY(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

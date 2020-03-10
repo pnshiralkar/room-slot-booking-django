@@ -104,14 +104,16 @@ function RowComponent(props){
           <IconButton className={classes.delRoom} onClick={handleDel}>
             <DeleteIcon/>
           </IconButton>
-          <IconButton className={classes.delRoom}>
-            {!edit && <EditIcon onClick={handleEdit} />}
-            {edit && <SaveIcon onClick={handleSave} />}
-          </IconButton>
-          <TimeSlotsModal roomId={room.id} roomName={room.name}/>
+            {!edit &&  <IconButton className={classes.delRoom} onClick={handleEdit}>
+              <EditIcon/>
+            </IconButton>}
+          {edit &&  <IconButton className={classes.delRoom} onClick={handleSave}>
+            <SaveIcon />
+          </IconButton>}
+          <TimeSlotsModal roomId={room.id} roomName={room.name}  setDel={props.setDel} del={props.del}/>
           <div className={classes.numDays}>
             {!edit && <h3 className={classes.numDaysH3}>{room.num_days_in_adv}</h3>}
-            {edit && <div><Input type='number' placeholder={room.num_days_in_adv} onChange={handleDaysChange}/><br/></div>}
+            {edit && <div><Input type='number' placeholder={room.num_days_in_adv.toString()} onChange={handleDaysChange}/><br/></div>}
             days to book in advance
           </div>
         </Paper>
@@ -126,7 +128,7 @@ export default function Rooms(props) {
   const rows = props.rows;
   return (
     <React.Fragment>
-      <Title>My Rooms</Title>
+      <div style={{textAlign: 'left'}}><Title>My Rooms</Title></div>
 
       <List>
         {rows.map(row => (

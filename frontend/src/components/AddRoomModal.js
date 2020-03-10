@@ -90,8 +90,8 @@ export default function AddRoomModal(props) {
             >
                 <Fade in={open}>
                     <Paper className={classes.paper}>
-                        <IconButton className={classes.closeBtn}>
-                            <CloseIcon onClick={handleClose}/>
+                        <IconButton className={classes.closeBtn} onClick={handleClose}>
+                            <CloseIcon />
                         </IconButton>
                         <h1 id="transition-modal-title" style={{textAlign: 'center'}}>Add Room</h1>
                         <FormGroup style={{alignItems: 'center'}}>

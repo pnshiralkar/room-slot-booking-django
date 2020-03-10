@@ -29,6 +29,7 @@ import Typography from "@material-ui/core/Typography";
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import IconButton from "@material-ui/core/IconButton";
 import TimeSlotsModal from "./TimeSlotsModal";
+import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles(theme => ({
   seeMore: {
@@ -83,6 +84,7 @@ function RowComponent(props){
     e.preventDefault();
     axios.delete(baseUrl+'/timeslots/'+props.timeslot.id, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
       props.setDel(!props.del);
+      props.setDelP(!props.delP);
     })
   }
 
@@ -95,7 +97,7 @@ function RowComponent(props){
           <ListItemText className={classes.roomTitle}>
             <h3>{from + ':' + props.timeslot.time_from.split(':')[1] + ampmFrom}</h3>
           </ListItemText>
-          <FormHelperText className={classes.roomTitle} style={{marginTop: '12px'}}><h3>to</h3></FormHelperText>
+          <Box color="text.secondary" className={classes.roomTitle} style={{marginTop: '12px'}}><h3>to</h3></Box>
           <ListItemText className={classes.roomTitle}>
             <h3>{to + ':' + props.timeslot.time_to.split(':')[1] + ampmTo}</h3>
           </ListItemText>
@@ -109,14 +111,14 @@ function RowComponent(props){
 
 const baseUrl = 'http://localhost:8000';
 
-export default function Rooms(props) {
+export default function TimeSlots(props) {
   const classes = useStyles();
   const rows = props.rows;
   return (
     <React.Fragment>
       <List>
         {rows.map(row => (
-          <RowComponent sr={row.sr} timeslot={row} setDel={props.setDel} del={props.del}/>
+          <RowComponent key={row.id} sr={row.sr} timeslot={row} setDel={props.setDel} del={props.del} delP={props.delP} setDelP={props.setDelP}/>
         ))}
         {!rows.length && <Typography color="textSecondary" style={{textAlign: 'center'}}>No timeslots to display!</Typography>}
       </List>

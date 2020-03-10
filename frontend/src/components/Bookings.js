@@ -29,6 +29,10 @@ import Typography from "@material-ui/core/Typography";
 import QueryBuilderIcon from '@material-ui/icons/QueryBuilder';
 import IconButton from "@material-ui/core/IconButton";
 import TimeSlotsModal from "./TimeSlotsModal";
+import FaceIcon from '@material-ui/icons/Face';
+import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
+import ProfileModal from "./ProfileModal";
 
 const useStyles = makeStyles(theme => ({
   seeMore: {
@@ -143,15 +147,17 @@ function RowComponent(props){
               <h3 style={{marginBottom: '5px'}}>{formatTime(props.booking.time_slot.time_from)}</h3>
             </Grid>
           </ListItemText>
-          <FormHelperText className={classes.roomTitle} style={{marginTop: '19px'}}><h3>to</h3></FormHelperText>
+          <Box color="text.secondary" className={classes.roomTitle} style={{marginTop: '19px'}}><h3>to</h3></Box>
           <ListItemText className={classes.roomTitle}>
             <Grid style={{textAlign: 'center'}}>
               <h3 style={{marginBottom: '5px'}}>{formatTime(props.booking.time_slot.time_to)}</h3>
             </Grid>
           </ListItemText>
-          {deletable(props.booking.date) && <IconButton className={classes.delRoom} onClick={handleDel}>
+          {!props.roomManager && deletable(props.booking.date) && <IconButton className={classes.delRoom} onClick={handleDel}>
             <DeleteIcon/>
           </IconButton>}
+          {props.roomManager && <ProfileModal customer name={props.booking.customer.first_name + ' ' + props.booking.customer.last_name} username={props.booking.customer.username} email={props.booking.customer.email} imgLink="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"/>}
+          {props.customer && <ProfileModal roomManager name={props.booking.time_slot.room_id.owner.first_name + ' ' + props.booking.time_slot.room_id.owner.last_name} username={props.booking.time_slot.room_id.owner.username} email={props.booking.time_slot.room_id.owner.email} imgLink="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"/>}
         </Paper>
       </ListItem>
   )
@@ -208,7 +214,7 @@ export default function Bookings(props) {
       <List>
         {rows.map(row => {
           if (dateOk(row.date, props.curr))
-            return (<RowComponent curr={props.curr} key={row.id} booking={row} setDel={props.setDel} del={props.del}/>)
+            return (<RowComponent roomManager={props.roomManager} customer={props.customer} curr={props.curr} key={row.id} booking={row} setDel={props.setDel} del={props.del}/>)
         })}
         {!c && <Typography color="textSecondary" style={{textAlign: 'center'}}>No bookings to display!</Typography>}
       </List>

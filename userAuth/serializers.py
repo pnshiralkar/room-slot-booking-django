@@ -21,7 +21,6 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def validate(self, attrs):
-        print(attrs.get('is_customer'), attrs.get('is_room_manager'))
         if not (attrs.get('is_customer') ^ attrs.get('is_room_manager')):
             raise serializers.ValidationError("User should be either customer or room manager (include and set either "
                                               "is_customer or is_room_manager to true")
@@ -37,3 +36,20 @@ class UserSerializer(serializers.ModelSerializer):
                 fields=['email']
             )
         ]
+
+
+class UserReadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'is_customer', 'is_room_manager']
+
+
+class UserField(serializers.PrimaryKeyRelatedField):
+    def to_representation(self, value):
+        pk = super(UserField, self).to_representation(value)
+        try:
+            item = User.objects.get(pk=pk)
+            serializer = UserSerializer(item)
+            return serializer.data
+        except:
+            return None

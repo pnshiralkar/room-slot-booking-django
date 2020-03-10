@@ -21,6 +21,10 @@ import MenuAppBar from "./components/AppBar";
 import Dashboard from "./components/Dashboard";
 import CustomerDashboard from "./components/CustomerDashboard";
 import Book from "./components/Book";
+import ManageRooms from "./components/ManageRooms";
+import Profile from "./components/Profile";
+import ProfileModal from "./components/ProfileModal";
+import Home from "./components/Home";
 
 
 class Hello extends React.Component {
@@ -74,6 +78,7 @@ class Btn extends React.Component{
 function App() {
     const [auth, setAuth] = React.useState(false);
     const [role, setRole] = React.useState();
+    const [title, setTitle] = React.useState('Room Slot Booking');
     const history = useHistory();
 
     useEffect(()=>{
@@ -82,24 +87,39 @@ function App() {
         else
             setAuth(false);
         setRole(reactLocalStorage.get('role'))
+        if(role == 'customer')
+            setTitle('Customer Dashboard')
+        else if(role == 'roomManager')
+            setTitle('Room Manager Dashboard')
+        else
+            setTitle('Room Slot Booking')
     })
 
     return (
         <div>
-            <MenuAppBar auth={auth} setAuth={setAuth} history={history} />
+            <MenuAppBar title={title} auth={auth} role={role} setAuth={setAuth} history={history} />
             <Switch>
                 <Route path="/signup">
                     <SignUp history={history}/>
                 </Route>
+                <Route path="/profile">
+                    <ProfileModal history={history} name="Pratham S" username="pns" email="pns@pns.pns" imgLink="https://material-ui.com/static/images/cards/contemplative-reptile.jpg"/>
+                </Route>
                 <Route path="/login">
-                    <Login auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
+                    <Login auth={auth} setAuth={setAuth} setRole={setRole} history={history} />
                 </Route>
                 <Route path="/book">
                     <Book auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
                 </Route>
+                <Route path="/rooms">
+                    <ManageRooms auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
+                </Route>
                 <Route path="/">
-                    {(role == "roomManager") && <Dashboard/>}
+                    {(role == "roomManager") && <Dashboard history={history}/>}
                     {(role == "customer") && <CustomerDashboard history={history}/>}
+                    {!(role == "roomManager") && !(role == "customer") &&
+                        <Home/>
+                    }
                 </Route>
             </Switch>
         </div>

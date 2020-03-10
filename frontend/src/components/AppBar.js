@@ -20,6 +20,16 @@ import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import {mainListItems, secondaryListItems} from "./listItems";
 import Drawer from "@material-ui/core/Drawer";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import DashboardIcon from "@material-ui/icons/Dashboard";
+import ListItemText from "@material-ui/core/ListItemText";
+import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import ListSubheader from "@material-ui/core/ListSubheader";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import AddIcon from '@material-ui/icons/Add';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import EditIcon from '@material-ui/icons/Edit';
 
 const drawerWidth = 340;
 
@@ -154,7 +164,7 @@ export default function MenuAppBar(props) {
                         <MenuIcon/>
                     </IconButton>}
                     <Typography variant="h6" className={classes.title} onClick={handleGoToHome}>
-                        Room Slot Booking
+                        {props.title}
                     </Typography>
                     {props.auth && (
                         <div>
@@ -204,9 +214,54 @@ export default function MenuAppBar(props) {
                     </IconButton>
                 </div>
                 <Divider/>
-                <List>{mainListItems}</List>
+                <List>
+                    {props.role == 'customer' && <div>
+                        <ListItem button onClick={()=>{history.push('/')}}>
+                            <ListItemIcon>
+                                <DashboardIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Customer Dashboard"/>
+                        </ListItem>
+                        <ListItem button onClick={()=>{history.push('/book')}}>
+                            <ListItemIcon>
+                                <AddIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Book a new room"/>
+                        </ListItem>
+                    </div>}
+                    {props.role == 'roomManager' && <div>
+                        <ListItem button  onClick={()=>{history.push('/')}}>
+                            <ListItemIcon>
+                                <DashboardIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Room Manager Dashboard"/>
+                        </ListItem>
+                        <ListItem button onClick={()=>{history.push('/rooms')}}>
+                            <ListItemIcon>
+                                <EditIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Manage Rooms and TimeSlots"/>
+                        </ListItem>
+                    </div>}
+                </List>
                 <Divider/>
-                <List>{secondaryListItems}</List>
+                <List>
+                    <div>
+                        <ListSubheader inset>Account</ListSubheader>
+                        <ListItem button>
+                            <ListItemIcon>
+                                <AccountCircle/>
+                            </ListItemIcon>
+                            <ListItemText primary="Profile"/>
+                        </ListItem>
+                        <ListItem button onClick={handleLogout}>
+                            <ListItemIcon>
+                                <ExitToAppIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Logout"/>
+                        </ListItem>
+                    </div>
+                </List>
             </Drawer>}
         </div>
     );

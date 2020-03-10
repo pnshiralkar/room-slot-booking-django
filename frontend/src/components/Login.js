@@ -21,7 +21,9 @@ import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     paper: {
-        marginTop: theme.spacing(8),
+        position: 'relative',
+        top: '40vh',
+        transform: 'translateY(-50%)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -205,7 +207,7 @@ export default function SignUp(props) {
                 <Typography component="h1" variant="h5">
                     Login
                 </Typography>
-                <Form classes={classes} auth={props.auth} setAuth={props.setAuth} history={props.history} setRole={props.setRole}/>
+                <Form classes={classes} {...props}/>
             </div>
         </Container>
     );

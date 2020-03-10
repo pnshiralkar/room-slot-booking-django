@@ -25,6 +25,11 @@ import Rooms from './Rooms';
 import axios from "axios";
 import {reactLocalStorage} from "reactjs-localstorage";
 import TransitionsModal from "./AddRoomModal";
+import BookingsTileCust from "./BookingsTileCust";
+import Bookings from "./Bookings";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 function Copyright() {
     return (
@@ -39,7 +44,7 @@ function Copyright() {
     );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -118,13 +123,24 @@ const useStyles = makeStyles(theme => ({
     fixedHeight: {
         height: 240,
     },
+    addBtn: {
+        position: 'fixed',
+        right: '3%',
+        bottom: '3%',
+        // height: '70px',
+        // width: '70px'
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1),
+    },
 }));
 const baseUrl = 'http://localhost:8000';
-export default function Dashboard() {
+export default function Dashboard(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [rows, setRows] = React.useState([]);
     const [del, setDel] = React.useState(true);
+    const [curr, setCurr] = React.useState('today');
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -133,8 +149,12 @@ export default function Dashboard() {
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    const handleManageRooms = (e) => {
+        props.history.push('/rooms');
+    }
+
     useEffect(() => {
-        axios.get(baseUrl + '/rooms', {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
+        axios.get(baseUrl + '/bookings', {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
             setRows(res.data);
         })
     }, [del]);
@@ -145,27 +165,41 @@ export default function Dashboard() {
             <main className={classes.content}>
                 <div className={classes.appBarSpacer}/>
                 <Container maxWidth="lg" className={classes.container}>
-                    <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={8} lg={9}>
-                            <Paper className={fixedHeightPaper}>
-                                <Chart/>
-                            </Paper>
-                        </Grid>
+                    <Grid container spacing={3} >
                         {/* Recent NumRooms */}
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <NumRooms rooms={rows} setDel={setDel} del={del}/>
+                                <BookingsTileCust curr="today" title="Today's Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={4} lg={3}>
+                            <Paper className={fixedHeightPaper}>
+                                <BookingsTileCust curr="upcoming" title="Upcoming Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={4} lg={3}>
+                            <Paper className={fixedHeightPaper}>
+                                <BookingsTileCust curr="past" title="Past Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                            </Paper>
+                        </Grid>
+                        <Grid item xs={12} md={4} lg={3}>
+                            <Paper className={fixedHeightPaper}>
+                                <BookingsTileCust curr="all" title="All Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
                             </Paper>
                         </Grid>
                         {/* Recent Rooms */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Rooms rows={rows} setDel={setDel} del={del}/>
+                                <Bookings roomManager curr={curr} rows={rows} setDel={setDel} del={del}/>
+                                {curr == 'new' && <Bookings rows={rows} setDel={setDel} del={del}/>}
                             </Paper>
                         </Grid>
                     </Grid>
                 </Container>
+                <Fab variant="extended" color="primary" aria-label="add" className={classes.addBtn} onClick={handleManageRooms}>
+                    <EditIcon className={classes.extendedIcon} />
+                      Manage Rooms
+                </Fab>
             </main>
         </div>
     );

@@ -78,8 +78,7 @@ export default function TimeSlotsModal(props) {
         console.log(from.toTimeString().split(' '));
         axios.post(baseUrl + '/timeslots', {time_from: from.toTimeString().split(' ')[0], time_to: to.toTimeString().split(' ')[0], room_id: props.roomId}, {headers: {'Authorization': 'token ' + reactLocalStorage.get('token')}}).then((res) => {
             setDel(!del);
-            // setOpen(false);
-            // Update list of slots
+            props.setDel(!props.del);
         }).catch(e=>{
             let err = '';
             let data = e.response.data;
@@ -126,15 +125,15 @@ export default function TimeSlotsModal(props) {
             >
                 <Fade in={open}>
                     <Paper className={classes.paper}>
-                        <IconButton className={classes.closeBtn}>
-                            <CloseIcon onClick={handleClose}/>
+                        <IconButton className={classes.closeBtn} onClick={handleClose}>
+                            <CloseIcon/>
                         </IconButton>
                         <h1 id="transition-modal-title" style={{textAlign: 'center', marginBottom: '5px'}}>Manage TimeSlots</h1>
                         <Typography color='textSecondary' style={{textAlign: 'center', marginBottom: '30px'}}>for {props.roomName} room </Typography>
 
                         {rows.map((row, ind)=>{
                             return (
-                                <TimeSlots rows={[{sr: ind+1, id:row.id, time_from: row.time_from, time_to: row.time_to}]} del={del} setDel={setDel}/>
+                                <TimeSlots key={row.id} rows={[{sr: ind+1, id:row.id, time_from: row.time_from, time_to: row.time_to}]} del={del} setDel={setDel} delP={props.del} setDelP={props.setDel}/>
                             )
                         })}
 

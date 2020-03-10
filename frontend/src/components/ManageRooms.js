@@ -25,7 +25,6 @@ import Rooms from './Rooms';
 import axios from "axios";
 import {reactLocalStorage} from "reactjs-localstorage";
 import TransitionsModal from "./AddRoomModal";
-import BookingsTileCust from "./BookingsTileCust";
 
 function Copyright() {
     return (
@@ -109,6 +108,7 @@ const useStyles = makeStyles(theme => ({
     container: {
         paddingTop: theme.spacing(4),
         paddingBottom: theme.spacing(4),
+        textAlign: 'center'
     },
     paper: {
         padding: theme.spacing(2),
@@ -119,15 +119,18 @@ const useStyles = makeStyles(theme => ({
     fixedHeight: {
         height: 240,
     },
+    CenterTile: {
+        position: 'relative',
+        left: '50%',
+        transform: 'translateX(-50%)'
+    }
 }));
 const baseUrl = 'http://localhost:8000';
-export default function Dashboard() {
+export default function ManageRooms() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [rows, setRows] = React.useState([]);
     const [del, setDel] = React.useState(true);
-    const [curr, setCurr] = React.useState('today');
-
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -148,26 +151,13 @@ export default function Dashboard() {
             <main className={classes.content}>
                 <div className={classes.appBarSpacer}/>
                 <Container maxWidth="lg" className={classes.container}>
+                    <Box color="text.secondary" style={{textAlign: 'center'}}><h2>Manage Rooms</h2></Box>
+
                     <Grid container spacing={3}>
-                        {/* Chart */}
-                        <Grid item xs={12} md={4} lg={3}>
+                        {/* Recent NumRooms */}
+                        <Grid item xs={12} md={4} lg={3} className={classes.CenterTile}>
                             <Paper className={fixedHeightPaper}>
-                                <BookingsTileCust curr="today" title="Today's Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <BookingsTileCust curr="upcoming" title="Upcoming Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <BookingsTileCust curr="past" title="Past Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
-                            </Paper>
-                        </Grid>
-                        <Grid item xs={12} md={4} lg={3}>
-                            <Paper className={fixedHeightPaper}>
-                                <BookingsTileCust curr="all" title="All Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                                <NumRooms rooms={rows} setDel={setDel} del={del}/>
                             </Paper>
                         </Grid>
                         {/* Recent Rooms */}

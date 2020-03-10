@@ -25,7 +25,7 @@ import Rooms from './Rooms';
 import axios from "axios";
 import {reactLocalStorage} from "reactjs-localstorage";
 import TransitionsModal from "./AddRoomModal";
-import UpcomingBookings from "./UpcomingBookings";
+import BookingsTileCust from "./BookingsTileCust";
 import Bookings from "./Bookings";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from '@material-ui/icons/Add';
@@ -136,7 +136,7 @@ export default function Dashboard(props) {
     const [open, setOpen] = React.useState(true);
     const [rows, setRows] = React.useState([]);
     const [del, setDel] = React.useState(true);
-    const [curr, setCurr] = React.useState('upcoming');
+    const [curr, setCurr] = React.useState('today');
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -165,29 +165,29 @@ export default function Dashboard(props) {
                         {/* Recent NumRooms */}
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <UpcomingBookings curr="today" title="Today's Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                                <BookingsTileCust curr="today" title="Today's Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <UpcomingBookings curr="upcoming" title="Upcoming Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                                <BookingsTileCust curr="upcoming" title="Upcoming Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <UpcomingBookings curr="past" title="Past Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                                <BookingsTileCust curr="past" title="Past Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
                             </Paper>
                         </Grid>
                         <Grid item xs={12} md={4} lg={3}>
                             <Paper className={fixedHeightPaper}>
-                                <UpcomingBookings curr="all" title="All Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
+                                <BookingsTileCust curr="all" title="All Bookings" rooms={rows} setDel={setDel} del={del} setCurr={setCurr}/>
                             </Paper>
                         </Grid>
                         {/* Recent Rooms */}
                         <Grid item xs={12}>
                             <Paper className={classes.paper}>
-                                <Bookings curr={curr} rows={rows} setDel={setDel} del={del}/>
-                                {curr == 'new' && <Bookings rows={rows} setDel={setDel} del={del}/>}
+                                <Bookings customer curr={curr} rows={rows} setDel={setDel} del={del}/>
+                                {curr == 'new' && <Bookings customer rows={rows} setDel={setDel} del={del}/>}
                             </Paper>
                         </Grid>
                     </Grid>

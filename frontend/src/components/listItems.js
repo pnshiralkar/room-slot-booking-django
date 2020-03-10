@@ -10,38 +10,6 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import LayersIcon from '@material-ui/icons/Layers';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import AccountCircle from "@material-ui/icons/AccountCircle";
+import {reactLocalStorage} from "reactjs-localstorage";
 
-export const mainListItems = (
-  <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Dashboard" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Manage Rooms and TimeSlots" />
-    </ListItem>
-  </div>
-);
 
-export const secondaryListItems = (
-  <div>
-    <ListSubheader inset>Account</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-          <AccountCircle/>
-      </ListItemIcon>
-      <ListItemText primary="Profile" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Logout" />
-    </ListItem>
-  </div>
-);
