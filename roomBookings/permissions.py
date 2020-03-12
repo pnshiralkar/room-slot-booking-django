@@ -1,9 +1,9 @@
 from rest_framework import permissions
 
 
-class IsOwner(permissions.BasePermission):
+class IsOwnerOrReadOnly(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.owner == request.user
+        return obj.owner == request.user or request.method == "GET"
 
 
 class IsRoomOwner(permissions.BasePermission):
@@ -14,6 +14,11 @@ class IsRoomOwner(permissions.BasePermission):
 class IsRoomManager(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.is_room_manager
+
+
+class IsRoomManagerOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_room_manager or request.method == "GET"
 
 
 class IsCustomer(permissions.BasePermission):

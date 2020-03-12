@@ -5,18 +5,19 @@ from rest_framework.views import APIView
 
 from roomBookings.models import Room, TimeSlot, Booking
 from roomBookings import permissions as my_permissions
-from roomBookings.serializers import RoomSerializer, TimeSlotsSerializer, BookingSerializer, RoomForCustomerSerializer
+from roomBookings.serializers import RoomSerializer, TimeSlotsSerializer, BookingSerializer, \
+    BookingCreateSerializer, RoomCreateSerializer
 
 
 class Rooms(ListCreateAPIView):
-    # permission_classes = [my_permissions.IsOwner, permissions.IsAuthenticated, my_permissions.IsRoomManager]
+    permission_classes = [my_permissions.IsOwnerOrReadOnly, permissions.IsAuthenticated, my_permissions.IsRoomManagerOrReadOnly]
     # serializer_class = RoomSerializer
 
     def get_serializer_class(self):
-        if self.request.user.is_room_manager:
-            return RoomSerializer
+        if self.request.method == "POST":
+            return RoomCreateSerializer
         else:
-            return RoomForCustomerSerializer
+            return RoomSerializer
 
     def get_queryset(self):
         if self.request.user.is_room_manager:
@@ -52,7 +53,11 @@ class TimeSlotsRD(RetrieveDestroyAPIView):
 class Bookings(ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwnerOrRoomOwner,
                           my_permissions.IsCustomerOrRM]
-    serializer_class = BookingSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return BookingCreateSerializer
+        return BookingSerializer
 
     def get_queryset(self):
         if self.request.user.is_customer:

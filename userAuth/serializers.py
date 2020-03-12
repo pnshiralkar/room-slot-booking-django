@@ -35,7 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'is_customer', 'is_room_manager', 'password']
         extra_kwargs = {'first_name': {'required': True}, 'last_name': {'required': True}}
-        read_only_fields = ['is_customer', 'is_room_manager']
         validators = [
             UniqueTogetherValidator(
                 queryset=User.objects.all(),
