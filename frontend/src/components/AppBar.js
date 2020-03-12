@@ -133,6 +133,7 @@ export default function MenuAppBar(props) {
         props.setAuth(false);
         reactLocalStorage.remove('token');
         reactLocalStorage.remove('role');
+        handleClose();
     };
 
     const handleGoToLogin = () => {
@@ -192,7 +193,7 @@ export default function MenuAppBar(props) {
                                 open={openMenu}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                                <MenuItem onClick={(e)=>{props.history.push('/profile'); handleClose()}}>Profile</MenuItem>
                                 <MenuItem onClick={handleLogout}>Logout</MenuItem>
                             </Menu>
                         </div>
@@ -216,13 +217,17 @@ export default function MenuAppBar(props) {
                 <Divider/>
                 <List>
                     {props.role == 'customer' && <div>
-                        <ListItem button onClick={()=>{history.push('/')}}>
+                        <ListItem button onClick={() => {
+                            history.push('/')
+                        }}>
                             <ListItemIcon>
                                 <DashboardIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Customer Dashboard"/>
                         </ListItem>
-                        <ListItem button onClick={()=>{history.push('/book')}}>
+                        <ListItem button onClick={() => {
+                            history.push('/book')
+                        }}>
                             <ListItemIcon>
                                 <AddIcon/>
                             </ListItemIcon>
@@ -230,13 +235,17 @@ export default function MenuAppBar(props) {
                         </ListItem>
                     </div>}
                     {props.role == 'roomManager' && <div>
-                        <ListItem button  onClick={()=>{history.push('/')}}>
+                        <ListItem button onClick={() => {
+                            history.push('/')
+                        }}>
                             <ListItemIcon>
                                 <DashboardIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Room Manager Dashboard"/>
                         </ListItem>
-                        <ListItem button onClick={()=>{history.push('/rooms')}}>
+                        <ListItem button onClick={() => {
+                            history.push('/rooms')
+                        }}>
                             <ListItemIcon>
                                 <EditIcon/>
                             </ListItemIcon>
@@ -248,7 +257,7 @@ export default function MenuAppBar(props) {
                 <List>
                     <div>
                         <ListSubheader inset>Account</ListSubheader>
-                        <ListItem button>
+                        <ListItem button onClick={(e)=>{props.history.push('/profile')}}>
                             <ListItemIcon>
                                 <AccountCircle/>
                             </ListItemIcon>

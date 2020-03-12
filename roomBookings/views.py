@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 from roomBookings.models import Room, TimeSlot, Booking
 from roomBookings import permissions as my_permissions
 from roomBookings.serializers import RoomSerializer, TimeSlotsSerializer, BookingSerializer, RoomForCustomerSerializer
-from userAuth.serializers import UserSerializer, UserReadSerializer
 
 
 class Rooms(ListCreateAPIView):
@@ -29,7 +28,6 @@ class Rooms(ListCreateAPIView):
         serializer.save(owner=self.request.user)
 
 
-
 class RoomsRUD(RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'id'
     queryset = Room.objects.all()
@@ -44,7 +42,6 @@ class TimeSlots(ListCreateAPIView):
         return TimeSlot.objects.filter(room_id=self.request.GET.get('room_id', 0))
 
 
-
 class TimeSlotsRD(RetrieveDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, my_permissions.IsRoomOwner, my_permissions.IsRoomManager]
     lookup_url_kwarg = 'id'
@@ -53,7 +50,8 @@ class TimeSlotsRD(RetrieveDestroyAPIView):
 
 
 class Bookings(ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwnerOrRoomOwner, my_permissions.IsCustomerOrRM]
+    permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwnerOrRoomOwner,
+                          my_permissions.IsCustomerOrRM]
     serializer_class = BookingSerializer
 
     def get_queryset(self):
