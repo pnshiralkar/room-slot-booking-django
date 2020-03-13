@@ -1,80 +1,21 @@
 import React, {useEffect} from 'react';
-import logo1 from './logo.svg';
 import './App.css';
-import {
-    BrowserRouter as Router,
-    Switch,
-    Route,
-    Link,
-    useRouteMatch,
-    useParams, withRouter
-} from "react-router-dom";
-import Button from '@material-ui/core/Button';
+// noinspection ES6CheckImport
+import {Route, Switch, useHistory, useLocation, withRouter} from "react-router-dom";
 import {reactLocalStorage} from 'reactjs-localstorage'
-import {useHistory, useLocation} from "react-router-dom";
 
 
-import SignUp from "./components/Signup";
-import Login from "./components/Login";
-import {AppBar} from "@material-ui/core";
-import MenuAppBar from "./components/AppBar";
-import Dashboard from "./components/Dashboard";
-import CustomerDashboard from "./components/CustomerDashboard";
-import Book from "./components/Book";
-import ManageRooms from "./components/ManageRooms";
-import Profile from "./components/Profile";
-import ProfileModal from "./components/ProfileModal";
-import Home from "./components/Home";
-import ManageProfile from "./components/ManageProfile";
+import SignupComponent from "./components/signup/signup.component";
+import Login from "./components/login/login.component";
+import MenuAppBar from "./components/app-bar/app-bar.component";
+import Dashboard from "./components/room-manager/dashboard.components";
+import CustomerDashboard from "./components/customer/customer-dashboard.component";
+import Book from "./components/customer/book/book.component";
+import ManageRooms from "./components/room-manager/rooms/manage-rooms-page.components";
+import HomeComponent from "./components/home.component";
+import ManageProfile from "./components/profile/manage-profile-page.component.jsx";
+import ApiDoc from "./components/api-doc/api-doc";
 
-
-class Hello extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {count: 0};
-        this.reset = this.reset.bind(this);
-    }
-
-    componentDidMount() {
-        setInterval(() => {
-            this.setState((state, props) => {
-                return ({count: state.count + 1})
-            });
-        }, 1000)
-    }
-
-    reset() {
-        this.setState({count: 0});
-    }
-
-    render() {
-        return (
-            <div>
-                <h1>Counter: {this.state.count}</h1>
-                <Btn callback={this.reset} show={true}/>
-            </div>
-        )
-    }
-}
-
-
-class Btn extends React.Component {
-    reset = (e) => {
-        e.preventDefault();
-        if (this.props.callback)
-            this.props.callback();
-    }
-
-    render() {
-        return this.props.show && (
-            <div>
-                {/*eslint-disable-next-line*/}
-                <Button onClick={this.reset}>Click</Button>
-                <a href="#" className="App-link" onClick={this.reset}>Click</a>
-            </div>
-        );
-    }
-}
 
 function App() {
     const [auth, setAuth] = React.useState(false);
@@ -89,42 +30,55 @@ function App() {
             setAuth(true);
         else
             setAuth(false);
-        setRole(reactLocalStorage.get('role'))
-        if (role == 'customer')
-            setTitle('Customer Dashboard')
-        else if (role == 'roomManager')
-            setTitle('Room Manager Dashboard')
-        else
-            setTitle('Room Slot Booking')
-    })
+
+        if(location.pathname === '/book' && !auth)
+            history.replace('/');
+
+        if(location.pathname === '/rooms' && !auth)
+            history.replace('/');
+
+        if (location.pathname === '/api')
+            setTitle('API Documentation');
+        else {
+            setRole(reactLocalStorage.get('role'));
+            if (role === 'customer')
+                setTitle('Customer Dashboard');
+            else if (role === 'roomManager')
+                setTitle('Room Manager Dashboard');
+            else
+                setTitle('Room Slot Booking')
+        }
+        // eslint-disable-next-line
+    }, [auth], location.pathname);
 
     return (
         <div>
             <MenuAppBar title={title} auth={auth} role={role} setAuth={setAuth} history={history}/>
             <Switch>
                 <Route path="/signup">
-                    <SignUp history={history}/>
+                    <SignupComponent history={history}/>
                 </Route>
                 <Route path="/profile">
                     {auth && <ManageProfile history={history} setAuth={setAuth}/>}
-                    {!auth && location.pathname=='/profile' && history.replace('/')}
+                    {!auth && location.pathname === '/profile' && history.replace('/')}
                 </Route>
                 <Route path="/login">
                     <Login auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>
                 </Route>
                 <Route path="/book">
                     {auth && <Book auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>}
-                    {!auth && location.pathname=='/book' && history.replace('/')}
                 </Route>
                 <Route path="/rooms">
                     {auth && <ManageRooms auth={auth} setAuth={setAuth} setRole={setRole} history={history}/>}
-                    {!auth && location.pathname=='/rooms' && history.replace('/')}
+                </Route>
+                <Route path="/api">
+                    <ApiDoc/>
                 </Route>
                 <Route path="/">
-                    {(role == "roomManager") && <Dashboard history={history}/>}
-                    {(role == "customer") && <CustomerDashboard history={history}/>}
-                    {!(role == "roomManager") && !(role == "customer") &&
-                    <Home/>
+                    {(role === "roomManager") && <Dashboard history={history}/>}
+                    {(role === "customer") && <CustomerDashboard history={history}/>}
+                    {!(role === "roomManager") && !(role === "customer") &&
+                    <HomeComponent history={history}/>
                     }
                 </Route>
             </Switch>
