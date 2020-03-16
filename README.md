@@ -20,15 +20,27 @@
 
 ## Start Server Locally :
 * ### Docker Image - 
+   **Make sure you have docker installed. If not, refer: https://docs.docker.com/install/** \
    `sudo docker run -d -p 8000:8000 pnshiralkar/fossee`
 * ### Download code and run - 
     **1. [Download](https://github.com/pnshiralkar/room-slot-booking-django/archive/master.zip) and extract the zip of Project and cd inside**\
     **OR**\
     `git clone https://github.com/pnshiralkar/room-slot-booking-django.git`\
+    `cd room-slot-booking-django`\
     **2.** `sudo pip3 install virtualenv`  **OR**  `sudo pip install virtualenv`\
     **3.** `virtualenv venv`\
     **4.** `source venv/bin/activate`\
     **5.** `cd src`\
-    **6.** `pip install -r requirements.txt`  **OR**  `pip3 install -r requirements.txt`\
-    **7.** `python manage.py test`\
-    **8.** `python manage.py runserver`
+    **6.** `pip install -r requirements.txt`
+    **7. Run Tests -** `python manage.py test`\
+    **8. Run Server -** `python manage.py runserver`
+
+
+## Highlights of the Project
+* PEP-8 Coding guidelines followed
+* Docker used to containerize the project
+* Used Django Server for backend
+* Added several tests for the Django project
+* Used React.js for frontend
+* API Endpoints created for user login/signup, manage rooms, timeslots, bookings
+* Used Swagger for API Documentation 
