@@ -28,10 +28,6 @@ class UserSerializer(serializers.ModelSerializer):
                                               "is_customer or is_room_manager to true")
         return attrs
 
-    # Validate password using Django's default method
-    def validate_password(self, attr):
-        return default_password_validation(attr)
-
     # Remove password field from response when returning User object
     def to_representation(self, instance):
         ret = super(UserSerializer, self).to_representation(instance)

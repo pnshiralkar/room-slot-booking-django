@@ -55,16 +55,7 @@ class TestUserAPIs(APITestCase):
         self.assertEquals(response.status_code, 400)
         self.assertIn('username', response.json())
 
-    # Call user signup with invalid password
-    def test_user_signup_duplicate_email(self):
-        response = self.client.post('http://localhost:8000/api/signup', {"username": 'test_user_customer1',
-                                                                         "password": 'pass',
-                                                                         "first_name": "Test",
-                                                                         "last_name": 'User',
-                                                                         "email": 'test@example.com',
-                                                                         "is_customer": True})
         self.assertEquals(response.status_code, 400)
-        self.assertIn('password', response.json())
 
     # Call user signup without is_customer and is_room_manager
     def test_user_signup_without_role(self):

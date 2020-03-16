@@ -54,4 +54,4 @@
  * The sample database already has following users created : \
   **1. Superuser** - username: admin, password: admin \
   **2. Customer** - username: test_customer, password: cust1234 \
-  **3. RoomManager** - username: test_roommanager, password: rmngr1234 
+  **3. RoomManager** - username: test_roommanager, password: rmgr1234 
