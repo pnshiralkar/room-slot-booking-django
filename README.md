@@ -36,7 +36,7 @@
     **8. Run Server -** `python manage.py runserver`
 
 
-## Highlights of the Project
+## Highlights of the Project :
 * PEP-8 Coding guidelines followed
 * Docker used to containerize the project
 * Used Django Server for backend
@@ -44,3 +44,14 @@
 * Used React.js for frontend
 * API Endpoints created for user login/signup, manage rooms, timeslots, bookings
 * Used Swagger for API Documentation 
+
+
+## Details of the project :
+ * Project can be used by the room managers to create, update or remove rooms and corresponding time slots.
+ * A Room manager can view the bookings of his rooms on the dashboard
+ * A customer can book rooms or cancel the bookings.
+ * A customer can see summary of bookings on the dashboard
+ * The sample database already has following users created : \
+  **1. Superuser** - username: admin, password: admin \
+  **2. Customer** - username: test_customer, password: cust1234 \
+  **3. RoomManager** - username: test_roommanager, password: rmngr1234 
