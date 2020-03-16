@@ -51,7 +51,5 @@
  * A Room manager can view the bookings of his rooms on the dashboard
  * A customer can book rooms or cancel the bookings.
  * A customer can see summary of bookings on the dashboard
- * The sample database already has following users created : \
-  **1. Superuser** - username: admin, password: admin \
-  **2. Customer** - username: test_customer, password: cust1234 \
-  **3. RoomManager** - username: test_roommanager, password: rmngr1234 
+ * The sample database already has superuser created\
+   username: admin, password: admin \
