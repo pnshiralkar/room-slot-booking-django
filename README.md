@@ -15,9 +15,12 @@
 <img src="https://github.com/pnshiralkar/room-slot-booking-django/blob/master/Screenshots/1.HomePage.png" width="49%">
 <img src="https://github.com/pnshiralkar/room-slot-booking-django/blob/master/Screenshots/2.APIDoc.png" width="49%">\
 **Other screenshots available [here](https://github.com/pnshiralkar/room-slot-booking-django/tree/master/Screenshots)**
+<<<<<<< HEAD
 
 <br/>
 
+=======
+>>>>>>> 7328c4056185bb6934f819428b36f99445fb46a7
 ## Start Server Locally :
 * ### Docker Image - 
    `sudo docker run -d -p 8000:8000 pnshiralkar/fossee`
@@ -31,4 +34,8 @@
     **5.** `cd src`\
     **6.** `pip install -r requirements.txt`  **OR**  `pip3 install -r requirements.txt`\
     **7.** `python manage.py test`\
+<<<<<<< HEAD
     **8.** `python manage.py runserver`
+=======
+    **8.** `python manage.py runserver`
+>>>>>>> 7328c4056185bb6934f819428b36f99445fb46a7
