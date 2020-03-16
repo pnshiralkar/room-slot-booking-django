@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
 from userAuth.models import User
 
+# Register User in Admin Panel
 admin.site.register(User)

@@ -1,35 +1,40 @@
-from django.db import models
-from rest_framework import serializers
 from datetime import datetime
+
+from rest_framework import serializers
+
 from roomBookings.models import Room, TimeSlot, Booking
 from userAuth.models import User
 from userAuth.serializers import UserField
 
 
+# Room Field to return whole room object instead of room_id in nested objects
 class RoomField(serializers.PrimaryKeyRelatedField):
     def to_representation(self, value):
         pk = super(RoomField, self).to_representation(value)
-        try:
-            item = Room.objects.get(pk=pk)
-            serializer = RoomOnlySerializer(item)
+        items = Room.objects.filter(pk=pk)
+        if len(items) > 0:
+            serializer = RoomOnlySerializer(items[0])
             return serializer.data
-        except:
+        else:
             return None
 
 
+# TimeSlot Field to return whole room object instead of time_slot_id in nested objects
 class TimeSlotField(serializers.PrimaryKeyRelatedField):
     def to_representation(self, value):
         pk = super(TimeSlotField, self).to_representation(value)
-        try:
-            item = TimeSlot.objects.get(pk=pk)
-            serializer = TimeSlotOnlyRoomsSerializer(item)
+        items = TimeSlot.objects.filter(pk=pk)
+        if len(items) > 0:
+            serializer = TimeSlotOnlyRoomsSerializer(items[0])
             return serializer.data
-        except:
+        else:
             return None
 
+# Serializers for Room object
 
+
+# Serializer for Booking model without time slot object
 class BookingOnlySerializer(serializers.ModelSerializer):
-    # time_slot = TimeSlotField(queryset=TimeSlot.objects.all())
 
     class Meta:
         fields = ['date']
@@ -47,6 +52,7 @@ class BookingOnlySerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer for TimeSlot model without room object (for nesting in other object)
 class TimeSlotOnlyBookingsSerializer(serializers.ModelSerializer):
     bookings = BookingOnlySerializer(many=True, read_only=True)
 
@@ -64,6 +70,7 @@ class TimeSlotOnlyBookingsSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer for TimeSlot model without associated booking objects (for nesting in other object)
 class TimeSlotOnlyRoomsSerializer(serializers.ModelSerializer):
     room_id = RoomField(queryset=Room.objects.all())
 
@@ -81,6 +88,7 @@ class TimeSlotOnlyRoomsSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer for Room model
 class RoomSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotOnlyBookingsSerializer(many=True, read_only=True)
     owner = UserField(queryset=User.objects.all())
@@ -92,6 +100,7 @@ class RoomSerializer(serializers.ModelSerializer):
         read_only_fields = ['owner', 'time_slots']
 
 
+# Serializer for Room model Create Operation
 class RoomCreateSerializer(serializers.ModelSerializer):
     time_slots = TimeSlotOnlyBookingsSerializer(many=True, read_only=True)
 
@@ -102,6 +111,7 @@ class RoomCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ['owner', 'time_slots']
 
 
+# Serializer for Room model without related TimeSlot objects (for nesting in other object)
 class RoomOnlySerializer(serializers.ModelSerializer):
     owner = UserField(queryset=User.objects.all())
 
@@ -112,6 +122,7 @@ class RoomOnlySerializer(serializers.ModelSerializer):
         read_only_fields = ['owner', 'time_slots']
 
 
+# Serializer for TimeSlot model
 class TimeSlotsSerializer(serializers.ModelSerializer):
     room_id = RoomField(queryset=Room.objects.all())
     bookings = BookingOnlySerializer(many=True, read_only=True)
@@ -131,6 +142,7 @@ class TimeSlotsSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer for Booking model
 class BookingSerializer(serializers.ModelSerializer):
     time_slot = TimeSlotField(queryset=TimeSlot.objects.all())
     customer = UserField(queryset=User.objects.all())
@@ -152,6 +164,7 @@ class BookingSerializer(serializers.ModelSerializer):
         return attrs
 
 
+# Serializer for Booking model for create operation
 class BookingCreateSerializer(serializers.ModelSerializer):
     time_slot = TimeSlotField(queryset=TimeSlot.objects.all())
 

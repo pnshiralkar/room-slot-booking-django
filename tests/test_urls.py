@@ -2,9 +2,10 @@ from django.test import SimpleTestCase
 from django.urls import resolve, reverse
 from django.views.generic import TemplateView
 
-from FOSSEE.urls import my_serve
+from RoomSlotBookingProject.urls import my_serve
 
 
+# Test URLs for Frontend part
 class TestUrls(SimpleTestCase):
 
     def test_url_frontend_index(self):

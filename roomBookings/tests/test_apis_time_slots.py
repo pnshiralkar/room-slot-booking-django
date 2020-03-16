@@ -1,23 +1,33 @@
 from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase, RequestsClient
 
-from roomBookings.models import Room, TimeSlot, Booking
+from roomBookings.models import Room, TimeSlot
 from userAuth.models import User
 
 
+# Tests for TimeSlots API
 class TestTimeSlots(APITestCase):
 
     def setUp(self):
         self.client = RequestsClient()
+
+        # Create 2 customer and 2 room manager users
         self.user1 = User.objects.create(username='test_user_room_manager', password='test_password',
                                          is_room_manager=True)
-        self.token1 = Token.objects.create(user=self.user1)
         self.user2 = User.objects.create(username='test_user_customer', password='test_password',
                                          is_customer=True)
-        self.token2 = Token.objects.create(user=self.user2)
         self.user3 = User.objects.create(username='test_user_room_manager2', password='test_password',
                                          is_customer=True)
+        self.user4 = User.objects.create(username='test_user_customer2', password='test_password',
+                                         is_customer=True)
+
+        # Generate tokens for the users
+        self.token1 = Token.objects.create(user=self.user1)
+        self.token2 = Token.objects.create(user=self.user2)
         self.token3 = Token.objects.create(user=self.user3)
+        self.token4 = Token.objects.create(user=self.user4)
+
+        # Create room and time-slot objects
         room1 = Room.objects.create(name="Sample Room1", num_days_in_adv=2, owner=self.user1)
         room2 = Room.objects.create(name="Sample Room2", num_days_in_adv=7, owner=self.user3)
         TimeSlot.objects.create(time_from='00:00', time_to='12:00', room_id=room1)

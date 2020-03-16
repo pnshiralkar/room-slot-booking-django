@@ -1,12 +1,11 @@
-from rest_framework import serializers
-from rest_framework.response import Response
-from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
-
 from django.contrib.auth.password_validation import validate_password as default_password_validation
+from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
 
 from userAuth.models import User
 
 
+# Serializer for User model
 class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
@@ -22,15 +21,18 @@ class UserSerializer(serializers.ModelSerializer):
         user.password = '**hidden**'
         return user
 
+    # Validate that user is either a customer or Room Manager
     def validate(self, attrs):
         if not (attrs.get('is_customer') ^ attrs.get('is_room_manager')):
             raise serializers.ValidationError("User should be either customer or room manager (include and set either "
                                               "is_customer or is_room_manager to true")
         return attrs
 
+    # Validate password using Django's default method
     def validate_password(self, attr):
         return default_password_validation(attr)
 
+    # Remove password field from response when returning User object
     def to_representation(self, instance):
         ret = super(UserSerializer, self).to_representation(instance)
         ret.pop('password')
@@ -48,6 +50,7 @@ class UserSerializer(serializers.ModelSerializer):
         ]
 
 
+# Serializer for User model for Retrieve, Update and Delete operations
 class UserRUDSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
@@ -60,9 +63,9 @@ class UserRUDSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        user.password = '**hidden**'
         return user
 
+    # Remove password field from response when returning User object
     def to_representation(self, instance):
         ret = super(UserRUDSerializer, self).to_representation(instance)
         ret.pop('password')
@@ -81,12 +84,13 @@ class UserRUDSerializer(serializers.ModelSerializer):
         ]
 
 
+# User Field to return whole User object instead of user_id in nested objects
 class UserField(serializers.PrimaryKeyRelatedField):
     def to_representation(self, value):
         pk = super(UserField, self).to_representation(value)
-        try:
-            item = User.objects.get(pk=pk)
-            serializer = UserSerializer(item)
+        items = User.objects.filter(pk=pk)
+        if len(items) > 0:
+            serializer = UserSerializer(items[0])
             return serializer.data
-        except:
+        else:
             return None
