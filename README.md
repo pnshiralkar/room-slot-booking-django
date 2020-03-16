@@ -10,8 +10,8 @@
 <br/>
 
 ## About the project :
-This is a simple room slot booking app built using Django, Django-REST-Framework and React.js.
-
+This is a simple room slot booking app built using Django, Django-REST-Framework and React.js.\
+![HomePage](https://github.com/pnshiralkar/room-slot-booking-django/blob/master/Screenshots/1.HomePage.png)
 <br/>
 
 ## Start Server Locally :
