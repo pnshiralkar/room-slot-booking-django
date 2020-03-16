@@ -57,6 +57,7 @@ class Form extends React.Component {
             validEmail: true,
             validPwd: true,
             validRole: false,
+            errorText: ''
         }
     }
 
@@ -174,7 +175,12 @@ class Form extends React.Component {
                     // network error
                     console.log('Error: Network Error\n' + error);
                 } else {
-                    console.log(error.response.data.message);
+                    let err = '';
+                    let data = error.response.data;
+                    for (let d in data)
+                        for (let i in data[d])
+                            err += data[d][i];
+                    this.setState({errorText: err})
                 }
             })
         }
@@ -268,6 +274,9 @@ class Form extends React.Component {
                                     name="role"
                                 />
                             </RadioGroup>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <FormHelperText error>{this.state.errorText}</FormHelperText><br/>
                         </Grid>
                     </Grid>
                     <Button

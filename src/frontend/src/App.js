@@ -41,6 +41,9 @@ function App() {
             history.replace('/');
         }
 
+        if(location.pathname === '/admin')
+            window.location.replace('/admin/');
+
         if (location.pathname === '/api')
             setTitle('API Documentation');
         else {

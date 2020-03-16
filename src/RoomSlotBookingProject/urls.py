@@ -26,7 +26,8 @@ def my_serve(request, path1, path2, document_root=None, show_indexes=False):
 
 urlpatterns = [
     # Django Admin panel route
-    path('admin/', admin.site.urls, name="admin"),
+    path('admin/', admin.site.urls),
+    # path('admin', admin.site.urls),
     
     # userAuth app URLs
     path('api/login', obtain_auth_token, name="login"),
