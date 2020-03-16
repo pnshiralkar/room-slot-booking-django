@@ -55,3 +55,4 @@
   **1. Superuser** - username: admin, password: admin \
   **2. Customer** - username: test_customer, password: cust1234 \
   **3. RoomManager** - username: test_roommanager, password: rmgr1234 
+
