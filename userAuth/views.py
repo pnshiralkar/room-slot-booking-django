@@ -28,14 +28,3 @@ class Profile(RetrieveUpdateAPIView):
     def get_queryset(self):
         self.id = self.request.user.id
         return User.objects.filter(id=self.request.user.id)
-
-
-
-def get_role(req):
-    try:
-        if Token.objects.get(key=req.headers.get('Authorization').split(' ')[1]).user.is_customer:
-            return JsonResponse({"role": "customer"})
-        else:
-            return JsonResponse({"role": "roomManager"})
-    except:
-        return JsonResponse({"details": "Invalid token"}, status=403)

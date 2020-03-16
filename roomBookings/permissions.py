@@ -6,9 +6,14 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
         return obj.owner == request.user or request.method == "GET"
 
 
+class IsOwner(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return obj.owner == request.user
+
+
 class IsRoomOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.room_id.owner == request.user
+        return obj.room_id.owner == request.user or obj.time_slot.room_id.owner == request.user
 
 
 class IsRoomManager(permissions.BasePermission):
@@ -38,4 +43,4 @@ class IsBookingOwner(permissions.BasePermission):
 
 class IsBookingOwnerOrRoomOwner(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
-        return obj.customer == request.user or obj.time_slot.room_id.owner == request.user
+        return obj.customer == request.user or (obj.time_slot.room_id.owner == request.user and request.method in ["GET", "OPTIONS"])

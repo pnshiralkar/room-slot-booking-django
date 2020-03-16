@@ -30,6 +30,8 @@ class Rooms(ListCreateAPIView):
 
 
 class RoomsRUD(RetrieveUpdateDestroyAPIView):
+    permission_classes = [my_permissions.IsOwner, permissions.IsAuthenticated, my_permissions.IsRoomManager]
+
     lookup_url_kwarg = 'id'
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
@@ -70,7 +72,9 @@ class Bookings(ListCreateAPIView):
 
 
 class BookingsRD(RetrieveDestroyAPIView):
-    permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwner, my_permissions.IsCustomer]
+    permission_classes = [permissions.IsAuthenticated, my_permissions.IsBookingOwnerOrRoomOwner]
     lookup_url_kwarg = 'id'
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+
+

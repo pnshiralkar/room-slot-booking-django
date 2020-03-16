@@ -2,6 +2,8 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator, UniqueTogetherValidator
 
+from django.contrib.auth.password_validation import validate_password as default_password_validation
+
 from userAuth.models import User
 
 
@@ -25,6 +27,9 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("User should be either customer or room manager (include and set either "
                                               "is_customer or is_room_manager to true")
         return attrs
+
+    def validate_password(self, attr):
+        return default_password_validation(attr)
 
     def to_representation(self, instance):
         ret = super(UserSerializer, self).to_representation(instance)
